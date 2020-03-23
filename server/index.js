@@ -6,6 +6,7 @@ const express = require('express'),
     controller = require('./controller'),
     { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env
 
+const mailerController = require('./mailerController')
 
 const app = express()
 
@@ -38,6 +39,12 @@ massive({
 })
 
 
+//nodemailer
+app.post('/mail', mailerController.sendEmail)
+
+//comments
+app.get('/api/comments/:id', controller.getComments)
+app.post('/api/addcomment', controller.addComment)
 
 //endpoints
 app.post('/api/auth/register', controller.register)

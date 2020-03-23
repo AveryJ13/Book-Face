@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import io from 'socket.io-client'
+import axios from 'axios'
 
 export const CTX = React.createContext()
 
@@ -44,7 +45,25 @@ function sendChatAction(value) {
     socket.emit('chat message', value)
 }
 
+
+
 export default function MessageStore(props) {
+
+    const [profile, profileChanger] = useState({})
+
+    useEffect(() => {
+        if (!profile.first_name) {
+            axios.get('/api/user').then(res => {
+                console.log(res)
+                profileChanger({ ...res.data })
+
+            }).catch(err => console.log(err))
+        }
+    }, [])
+
+    console.log(profile)
+
+
 
     const [allchats, dispatch] = React.useReducer(reducer, initState)
 
@@ -55,7 +74,8 @@ export default function MessageStore(props) {
         })
     }
 
-    const user = 'aaron' + Math.random(100).toFixed(2)
+    console.log(profile)
+    const user = profile.first_name
 
 
 

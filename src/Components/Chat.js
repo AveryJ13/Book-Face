@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -13,7 +13,9 @@ import { CTX } from './MessageStore'
 const useStyles = makeStyles(theme => ({
     root: {
         margin: '50px',
-        padding: theme.spacing(3, 2)
+        padding: theme.spacing(3, 2),
+        background: '#666666',
+        color: 'white'
 
     },
     flex: {
@@ -28,10 +30,12 @@ const useStyles = makeStyles(theme => ({
     chatWindow: {
         width: "70%",
         height: '300px',
-        padding: '20px'
+        padding: '20px',
+        overflow: 'scroll'
     },
     chatBox: {
-        width: '85%'
+        width: '85%',
+
     },
     button: {
         width: '15%'
@@ -45,7 +49,15 @@ const Chat = props => {
     const classes = useStyles()
 
     const { allchats, sendChatAction, user } = useContext(CTX)
+    const [newObj, changeNew] = useState({})
 
+    useEffect(() => {
+        if (!newObj) {
+            changeNew({ ...user })
+        }
+    }, [])
+
+    console.log(user)
 
     const topics = Object.keys(allchats)
 
@@ -60,7 +72,6 @@ const Chat = props => {
                     </Typography>
                 <Typography variant='h5' component='h5'>
                     {activeTopic}
-                    {console.log(activeTopic)}
                 </Typography>
                 <div className={classes.flex}>
                     <div className={classes.topicsWindow}>
@@ -80,8 +91,8 @@ const Chat = props => {
 
                         {
                             allchats[activeTopic].map((chat, i) => (
-                                <div className={classes.flex} key={i}>
-                                    <Chip label={chat.from} variant="outlined" className={classes.chip} />
+                                <div className={classes.flex} key={i} style={{ marginTop: '5px' }}>
+                                    <Chip label={chat.from} variant="outlined" className={classes.chip} style={{ background: 'white' }} />
                                     <Typography variant='p'>
                                         {chat.msg}
                                     </Typography>

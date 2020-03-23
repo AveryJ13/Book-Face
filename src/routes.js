@@ -16,6 +16,7 @@ export default (
         <Route exact path='/add' component={AddPage} />
         <Route exact path='/register' component={Register} />
         <Route path='/post/:id' component={Post} />
+
         <Route path='/chat' component={Chat} />
     </Switch>
 )

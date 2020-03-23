@@ -7,7 +7,7 @@ import MessageStore from './Components/MessageStore'
 
 function App(props) {
   return (
-    <div>
+    <div className='App'>
       <MessageStore>
         {props.location.pathname === '/' || props.location.pathname === '/register' ? (
           <>

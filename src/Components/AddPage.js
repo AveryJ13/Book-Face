@@ -3,8 +3,35 @@ import { connect } from 'react-redux'
 import { get_user } from '../redux/reducer'
 import { logout } from '../redux/reducer'
 import axios from 'axios'
+import Card from '@material-ui/core/Card';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 function AddPage(props) {
+
+    const useStyles = makeStyles({
+        root: {
+            minWidth: 275,
+            margin: '0px',
+
+        },
+        bullet: {
+            display: 'inline-block',
+            margin: '0 2px',
+            transform: 'scale(0.8)',
+        },
+        title: {
+            fontSize: 14,
+        },
+        pos: {
+            marginBottom: 12,
+        },
+    });
+
+    const classes = useStyles();
+
     const [post_title, changeTitle] = useState('')
     const [post_img, changeImg] = useState('')
     const [post_text, changeText] = useState('')
@@ -13,6 +40,7 @@ function AddPage(props) {
     useEffect(() => {
         axios.get('/api/checkUser').then(res => {
             changeUser(res.data)
+            console.log(res.data)
         }).catch(() => props.history.push('/'))
     }, [])
 
@@ -25,14 +53,34 @@ function AddPage(props) {
     }
 
     return (
-        <div>
-            AddPage.js
-            <div>Title: <input onChange={(e) => changeTitle(e.target.value)} /></div>
-            <div>Img URL: <input onChange={(e) => changeImg(e.target.value)} /></div>
-            <div>Post: <input onChange={(e) => changeText(e.target.value)} /></div>
-            <div>
-                <button onClick={() => { handleAdd() }}>Add</button>
-            </div>
+        <div style={{ padding: '30px', display: 'flex', justifyContent: 'center' }}>
+            <Card className={classes.root} varaint='outlined' style={{}}>
+                <Typography variant="h5" component="h2" style={{ marginBottom: '10px', marginTop: '10px' }} >
+                    Add Your New Post
+        </Typography>
+                <div><TextField id="outlined-search" label="Title" type="search" variant="outlined" onChange={(e) => changeTitle(e.target.value)} style={{ marginBottom: '10px' }} /></div>
+                <div><TextField id="outlined-search" label="Img Url" type="search" variant="outlined" onChange={(e) => changeImg(e.target.value)} style={{ marginBottom: '10px' }} /></div>
+                <TextField
+                    label="post text"
+                    multiline
+                    rowsMax="4"
+                    value={post_text}
+                    onChange={(e) => changeText(e.target.value)}
+                    style={{
+                        marginBottom: '10px',
+                        width: '85%'
+                    }}
+                />
+                <div>
+                    <Button variant="contained" color="primary" onClick={() => { handleAdd() }}
+                        style={{
+                            marginBottom: '10px'
+                        }}>
+                        Create Post
+                            </Button>
+
+                </div>
+            </Card>
         </div>
     )
 }

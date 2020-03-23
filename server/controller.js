@@ -51,7 +51,9 @@ module.exports = {
         return res.status(200).send(post)
     },
     checkUser: async (req, res) => {
+        console.log(req.session.user)
         if (req.session.user) {
+
             return res.status(200).send(req.session.user)
         }
         else {
@@ -72,6 +74,7 @@ module.exports = {
     },
     getUserInfo: async (req, res) => {
         const { session } = req
+        console.log(session)
         return res.status(200).send(session.user)
     },
     getAuthor: async (req, res) => {
@@ -103,5 +106,20 @@ module.exports = {
         const { post_title, post_img, post_text } = req.body
         db.edit_post([post_title, post_img, post_text, +id.id])
         res.sendStatus(200)
+    },
+    getComments: async (req, res) => {
+        const db = req.app.get('db')
+        const { id } = req.params
+        console.log(id)
+        let comments = await db.get_comments([+id])
+        res.status(200).send(comments)
+
+    },
+    addComment: async (req, res) => {
+        const db = req.app.get('db')
+        const { session } = req
+        const { comment_id, comment_text } = req.body
+        let newComment = await db.add_comment([comment_id, comment_text, session.user.first_name, session.user.last_name])
+        res.status(200).send(newComment)
     }
 }

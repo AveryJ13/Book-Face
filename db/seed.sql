@@ -11,3 +11,5 @@ create table project_posts (
     post_text text,
     user_id references project_users(user_id)
 )
+
+-- comment_id in project_comments references the post_id of project_posts
